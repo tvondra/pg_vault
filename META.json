@@ -1,0 +1,34 @@
+{
+   "name": "pg_vault",
+   "abstract": "An experimental extension for key-management of encryption keys used in pgcrypto.",
+   "description": "This PostgreSQL extension provides a simple in-memory vault for encryption keys (used for example with [pgcrypto][pgcrypto]). The goal of such vault is to perform cryptography without passing the keys/passphrases to the SQL functions directly, as that means that all manipulating the data need to know the actual key, the key may leak to various logs (e.g. slow query logs) and some tasks are considerably more difficult (e.g. rolling out a new key).",
+   "version": "0.0.1",
+   "maintainer": "Tomas Vondra <tomas@pgaddict.com>",
+   "license": "bsd",
+   "prereqs": {
+      "runtime": {
+         "requires": {
+            "PostgreSQL": "9.0.0"
+         }
+      }
+   },
+   "provides": {
+     "pg_vault": {
+       "file": "pg_vault--0.0.1.sql",
+       "version": "0.0.1"
+     }
+   },
+   "resources": {
+      "repository": {
+        "url":  "https://github.com:tvondra/pg_vault.git",
+        "web":  "http://github.com/tvondra/pg_vault",
+        "type": "git"
+      }
+   },
+   "tags" : ["vault", "encryption", "key", "management"],
+   "meta-spec": {
+      "version": "1.0.0",
+      "url": "http://pgxn.org/meta/spec.txt"
+   },
+   "release_status" : "unstable"
+}
