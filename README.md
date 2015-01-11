@@ -20,7 +20,7 @@ be broken or flawed in various ways.
 The extension is not:
 
 * _a replacement for pgcrypto_ - The extension does not implement
-  any sort of crypto algorithmsm, it completely relies on pgcrypto
+  any sort of crypto algorithms, it completely relies on pgcrypto
   in this respect.
 
 * _a magical box protecting the keys_ - It's not a replacement for
