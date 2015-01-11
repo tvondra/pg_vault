@@ -156,5 +156,47 @@ wallet (encrypted file and a means to load it after startup), but
 that's not implemented yet.
 
 
+Possible improvements
+---------------------
+There are several possible improvements of the current version:
+
+* _per-db keys_ - At this moment, all the keys are 'global' i.e.
+  shared by all the databases in a cluster. This makes it rather
+  difficult to use on clusters with multiple databases, as each
+  database may access and manipulate all the other keys. It's
+  however possible to fix this by tracking ID of the databases
+  for each key (and only allowing access to the right keys).
+
+  It's worth noting that this only improves the API - the memory
+  is just as vulnerable as before (e.g. an extension written in
+  C can still read the vault from shared memory and just ignore
+  the database IDs).
+
+* _dump/load the keys_ - Currently the keys are stored in memory
+  in a raw form - completely unprotected. It might be possible
+  to add some sort of PIN code (different for each DB / key),
+  possibly improving the defense when someone reads the memory.
+  OTOH the PIN needs to be provided somehow, may leak into logs
+  and so on. Also, if you hardcode the PIN into a wrapper, the
+  attacker may just dump the function definition, etc.
+
+* _external storage_ - Instead of storing the vault in a shared
+  memory segment, making it vulnerable to simply reading the memory
+  from the backend process (C extensions are just shared libraries
+  linked into the process), it might be stored separately and
+  only accessible through a limited API, thus significantly
+  reducing the attack surface. It might be a separate process on
+  the same box (address space separate from the backend process),
+  a different machine (accessed through network) or even something
+  like [usbarmory][http://inversepath.com/usbarmory].
+
+* _public crypto_ - All the examples in this README used symmetric
+  crypto only. I don't think I've ever seen assymetric crypto done
+  in a database, except maybe the operations using public keys. And
+  there's not much need to protect those, because they're public.
+  It however should not be that difficult to make it work with
+  private keys too, if needed.
+
+
 [HSM]: http://en.wikipedia.org/wiki/Hardware_security_module
 [pgcrypto]: http://www.postgresql.org/docs/devel/static/pgcrypto.html
